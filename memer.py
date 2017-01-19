@@ -5,6 +5,7 @@ from wand.drawing import Drawing
 from wand.color import Color
 
 def make_meme(bg_url, top_line, bottom_line):
+    print(bg_url)
     req = Request(bg_url, headers={'User-Agent': 'Mozilla/5.0'})
     with urlopen(req) as bg_img:
         with Image(file=bg_img) as img:
