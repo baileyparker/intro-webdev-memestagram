@@ -17,7 +17,7 @@ def add_meme():
     top_caption = request.form['top_caption']
     bottom_caption = request.form['bottom_caption']
 
-    get_db().execute('INSERT INTO memes(url, caption1, caption2, image) VALUES(?, ?, ?, ?);', (
+    get_db().execute('INSERT INTO memes(url, caption1, caption2, image, likes) VALUES(?, ?, ?, ?, 0);', (
         bg_url,
         top_caption,
         bottom_caption,
@@ -26,11 +26,16 @@ def add_meme():
 
     return redirect(url_for('index'))
 
+@app.route('/like/<id>')
+def like_meme(id):
+    get_db().execute('UPDATE memes SET likes = likes + 1 WHERE id = ?', [int(id)])
+    return redirect(request.referrer)
+
+
 @app.route('/meme/<id>')
 def show(id):
-    meme = get_db().select('SELECT id, url, caption1, caption2 FROM memes WHERE id=?;',
+    meme = get_db().select('SELECT id, url, caption1, caption2, likes FROM memes WHERE id=?;',
                            [id])[0]
-
     return render_template('show.html', meme=meme)
 
 @app.route('/meme/<id>.jpg')
@@ -38,7 +43,6 @@ def show_image(id):
     memes = get_db().select('SELECT id, url, caption1, caption2, image FROM memes WHERE id = ?', [int(id)])
     meme = memes[0]
 
-    print('meme')
     image = BytesIO(meme['image'])
     return send_file(image, mimetype='image/jpeg')
 
@@ -49,8 +53,14 @@ def meme_form():
 
 @app.route('/')
 def index():
-    memes = get_db().select('SELECT id, url, caption1, caption2 FROM memes')
+    memes = get_db().select('SELECT id, url, caption1, caption2, likes FROM memes')
     return render_template('homepage.html', memes=memes)
+
+def chunk(l, n):
+    for i in range(0, len(l), n):
+        yield l[i:i+n]
+
+app.jinja_env.globals.update(chunk=chunk)
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('BIND_TO', '127.0.0.1'),

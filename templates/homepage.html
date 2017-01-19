@@ -1,22 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>MEMES!!</title>
-</head>
-<body>
-    <h1>Listing of Memes</h1>
-    <a href="/meme_form">Add a meme!</a>
+{% extends "base.html" %}
+
+{% block title %}MEMES!!{% endblock %}
+
+{% block body %}
+    <style>
+    img {
+        max-width: 100%;
+    }
+
+    .row {
+        margin-top: 1rem;
+    }
+    </style>
+
     {% if memes == [] %}
     There are no memes. Make memes. I'm sad. i need memes. send memes.
     {%else%}
-    <ul>
-        {%for meme in memes%}
-        <li>
-            <div><a href="/meme/{{meme['id']}}">{{meme['caption1']}}</a></div>
-            <div><a href="/meme/{{meme['id']}}">{{meme['caption2']}}</a></div>
-        </li>
-        {%endfor%}
-    </ul>
+        {% for row_memes in chunk(memes, 3) %}
+            <div class="row">
+                {% for meme in row_memes %}
+                    <div class="col-4">
+                        {% include "meme-card.html" %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     {%endif%}
-</body>
-</html>
+{% endblock %}

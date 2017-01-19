@@ -1,11 +1,22 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Your meme!!!</title>
-</head>
-<body>
-    <h1>Here's your meme</h1>
-    <img src="{{ url_for('show_image', id=meme['id']) }}"
-         alt="{{ meme['caption1'] }} {{ meme['caption2'] }}">
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Your meme!!!{% endblock %}
+
+{% block body %}
+    <style>
+    img {
+        min-width: 100%;
+        max-width: 100%;
+    }
+
+    .row {
+        margin-top: 1rem;
+    }
+    </style>
+
+    <div class="row">
+        <div class="col-7">
+            {% include "meme-card.html" %}
+        </div>
+    </div>
+{% endblock %}
