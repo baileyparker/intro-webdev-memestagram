@@ -4,7 +4,7 @@
              alt="{{ meme['caption1'] }} {{ meme['caption2'] }}" class="card-img-top">
     </a>
   <div class="card-block">
-      <a href="{{ url_for('like_meme', id=meme['id']) }}" class="card-link"><i class="fa fa-heart" aria-hidden="true"></i> {{ meme['likes'] }}</a>
+      <a href="{{ url_for('like_meme', id=meme['id']) }}" class="card-link like-link"><i class="fa fa-heart" aria-hidden="true"></i> <span class="count">{{ meme['likes'] }}</span></a>
     <a href="#" class="card-link"><i class="fa fa-comment" aria-hidden="true"></i> 0</a>
   </div>
 </div>
